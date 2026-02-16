@@ -34,23 +34,25 @@ Derivev2/
 └── docs/                   # Documentation
 ```
 
-## 🚀 Installation
+## 🚀 Lancement Rapide
 
-1. Cloner le repository
+### Option 1 : Double-clic (Standalone) ⚡
+**Le plus simple !**
+1. Télécharger/cloner le projet
+2. Double-cliquer sur `index.html`
+3. Jouer immédiatement !
+
+✅ Tout fonctionne sauf le classement en ligne (score local uniquement)
+
+### Option 2 : Avec Serveur (Classement en ligne) 🏆
 ```bash
 git clone https://github.com/OuzdBroono/Derivev2.git
 cd Derivev2
-```
-
-2. Lancer un serveur local (PHP requis pour le classement)
-```bash
 php -S localhost:8000
+# Ouvrir http://localhost:8000
 ```
 
-3. Ouvrir dans le navigateur
-```
-http://localhost:8000
-```
+📖 **Plus de détails** : Voir [LAUNCH.md](LAUNCH.md)
 
 ## 🎯 Fonctionnalités
 

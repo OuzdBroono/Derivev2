@@ -11,6 +11,12 @@ let game;
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 Derive v2 - Initialisation...');
 
+    // Détecte si le jeu tourne en mode standalone (file://)
+    const isStandalone = window.location.protocol === 'file:';
+    if (isStandalone) {
+        console.log('⚠️ Mode standalone détecté - Le classement en ligne ne sera pas disponible');
+    }
+
     // Crée l'instance du jeu
     game = new Game();
     game.init();
@@ -46,7 +52,32 @@ function setupMainMenu() {
         hideScreen('startScreen');
         showScreen('leaderboardScreen');
 
-        // Charge le classement
+        // Vérifie si en mode standalone
+        const isStandalone = window.location.protocol === 'file:';
+
+        if (isStandalone) {
+            // Affiche le meilleur score local uniquement
+            const bestScore = game.leaderboardSystem.getLocalBest();
+            document.getElementById('leaderboardList').innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <h3 style="color: var(--primary); margin-bottom: 1rem;">Meilleur Score Local</h3>
+                    <div class="leaderboard-entry" style="justify-content: center; gap: 2rem;">
+                        <span class="leaderboard-name">Vous</span>
+                        <span class="leaderboard-level" style="color: var(--text-dim);">
+                            Niv. ${bestScore.level}
+                        </span>
+                        <span class="leaderboard-score">${Utils.formatNumber(bestScore.score)}</span>
+                    </div>
+                    <p style="color: var(--text-dim); margin-top: 2rem; font-size: 0.9rem;">
+                        ℹ️ Le classement en ligne nécessite un serveur PHP.<br>
+                        Lancez avec : <code style="background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 0.25rem;">php -S localhost:8000</code>
+                    </p>
+                </div>
+            `;
+            return;
+        }
+
+        // Charge le classement en ligne
         document.getElementById('leaderboardList').innerHTML = `
             <div style="text-align: center; padding: 2rem; color: var(--text-dim);">
                 Chargement...
@@ -58,9 +89,21 @@ function setupMainMenu() {
         if (result.success) {
             game.leaderboardSystem.displayLeaderboard(result.scores);
         } else {
+            // Affiche le meilleur score local en cas d'erreur
+            const bestScore = game.leaderboardSystem.getLocalBest();
             document.getElementById('leaderboardList').innerHTML = `
-                <div style="text-align: center; padding: 2rem; color: var(--accent);">
-                    Erreur de chargement du classement.
+                <div style="text-align: center; padding: 2rem;">
+                    <p style="color: var(--accent); margin-bottom: 2rem;">
+                        ⚠️ Impossible de charger le classement en ligne
+                    </p>
+                    <h3 style="color: var(--primary); margin-bottom: 1rem;">Meilleur Score Local</h3>
+                    <div class="leaderboard-entry" style="justify-content: center; gap: 2rem;">
+                        <span class="leaderboard-name">Vous</span>
+                        <span class="leaderboard-level" style="color: var(--text-dim);">
+                            Niv. ${bestScore.level}
+                        </span>
+                        <span class="leaderboard-score">${Utils.formatNumber(bestScore.score)}</span>
+                    </div>
                 </div>
             `;
         }
@@ -93,6 +136,16 @@ function setupGameOverScreen() {
             return;
         }
 
+        // Vérifie si en mode standalone
+        const isStandalone = window.location.protocol === 'file:';
+
+        if (isStandalone) {
+            alert('ℹ️ Mode standalone : Score sauvegardé localement uniquement.\n\nPour le classement en ligne, lancez avec un serveur :\nphp -S localhost:8000');
+            playerNameInput.value = '';
+            document.getElementById('nameInput').style.display = 'none';
+            return;
+        }
+
         submitScore.disabled = true;
         submitScore.textContent = 'Envoi...';
 
@@ -108,7 +161,7 @@ function setupGameOverScreen() {
             playerNameInput.value = '';
             document.getElementById('nameInput').style.display = 'none';
         } else {
-            alert('Erreur lors de l\'enregistrement du score');
+            alert('Erreur lors de l\'enregistrement du score.\nScore sauvegardé localement.');
             submitScore.disabled = false;
             submitScore.textContent = 'Enregistrer';
         }
