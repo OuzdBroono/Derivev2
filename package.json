@@ -1,0 +1,40 @@
+{
+  "name": "derive-v2",
+  "version": "2.0.0",
+  "description": "Jeu arcade spatial infini en 2D - Un voyage sans fin dans le cosmos",
+  "main": "index.html",
+  "scripts": {
+    "start": "php -S localhost:8000",
+    "dev": "php -S localhost:8000",
+    "serve": "http-server -p 8000 -c-1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OuzdBroono/Derivev2.git"
+  },
+  "keywords": [
+    "game",
+    "arcade",
+    "space",
+    "canvas",
+    "javascript",
+    "web-game",
+    "html5",
+    "roguelike",
+    "shooter",
+    "procedural"
+  ],
+  "author": "OuzdBroono",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OuzdBroono/Derivev2/issues"
+  },
+  "homepage": "https://github.com/OuzdBroono/Derivev2#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "php": ">=7.4.0"
+  }
+}
